@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<!-- 用于登录可暴力破解时，由于用户名密码被开发自定义加密算法，无法直接使用BurpSuite进行暴力破解，但可以在客户端js中发现加密解密方式和key(如果有) -->
+<!-- 欢迎修改 -->
+<!-- By: fjq -->
+  <head>
+    <title>暴力破解-客户端加密解密</title>
+    <meta name="content-type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" src="security.js"></script>
+	<script type="text/javascript">
+  		function MyEncrypt(){
+			
+  			var str = document.getElementById("words1").value;
+  			if(str == ""){
+  				alert("必须输入字典");
+  				return;
+  			}
+  			var str1=str.split("\n");
+  			var text = "";
+  			for (var i = 0; i < str1.length; i++) {
+				var raskey = RSAUtils.getKeyPair('010001', '', '00BE5882813617E45A006A7E9122259FCC440FE9C412671D723D8FE9FC9D5A8DF2633957AE5A8B86AA52573E2278F65C18BBEA1379B30C3A6BFB36BC68CC8BB720702CD3F13647AD1B142CBB1BED6A6E6BFAF0D7D8EFA65CC4FF48FA6EE0EBEC1BB88EDDDD6538982F18E7E38FF3152FBBDEB5277228A748F71F8CEB93072D0937');
+  				//加密方法(修改这里)
+				text += RSAUtils.encryptedString(raskey, Utf8.encode(str1[i])) + "\n";
+			}
+  			document.getElementById("encwords1").innerHTML = text; 		  	
+  		}
+  		/*function MyDecrypt(){
+  			var str = document.getElementById("encwords2").value;
+  			if(str == ""){
+  				alert("必须输入密文");
+  				return;
+  			}
+  			var str1=str.split("\n");
+  			var text = "";
+  			for (i = 0; i < str1.length; i++) {
+  				//解密方法(修改这里)
+				text += decrypt(str1[i])+"\n";
+			}
+  			document.getElementById("words2").innerHTML = text; 		  	
+  		}
+		*/
+  	</script>
+  </head>
+  <body>
+  	<table align="center">
+  		<tr>
+  			<th>字典</th>
+  			<th>加解密</th>
+  			<th>密文</th>
+  		</tr>
+  		<tr>
+  			<td><textarea rows="10" cols="30" id="words1" required="required" placeholder="输入字典"></textarea></td>
+  			<td><input type="submit" name="encrypt" value="encrypt" onclick="MyEncrypt()"></td>
+  			<td><textarea rows="10" cols="30" id="encwords1"></textarea></td>
+  		</tr>
+  		<!--<tr>
+  			<td><textarea rows="10" cols="30" id="words2"></textarea></td>
+  			<td><input type="submit" name="decrypt" value="decrypt" onclick="MyDecrypt()"></td>
+  			<td><textarea rows="10" cols="30" id="encwords2" required="required" placeholder="输入密文"></textarea></td>
+  		</tr>
+		-->
+  		<tr>
+  			<td colspan="3">
+  				<font color="red">!!!使用前提:应用系统登录模块可以暴力破解,js中可以找到加解密方法</font><br>
+  				1.需要引入客户端加密相关使用的js路径，如果多条，引入多条<br>
+  				2.需要修改使用的加密方法名
+  			</td>		
+  		</tr>
+  	</table>
+  </body>
+</html>

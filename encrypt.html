@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<!-- 用于登录可暴力破解时，由于用户名密码被开发自定义加密算法，无法直接使用BurpSuite进行暴力破解，但可以在客户端js中发现加密解密方式和key(如果有) -->
+<!-- 欢迎修改 -->
+<!-- mail: 18953194574@189.cn -->
+<!-- By: chinatelecom 坂田一giao -->
+  <head>
+    <title>暴力破解-客户端端加密</title>
+    <meta name="content-type" content="text/html; charset=UTF-8"> 
+	<script type="text/javascript" src="https://www.xxx.cn/client/wap/common/js/tools.js"></script>
+	<script type="text/javascript" src="https://www.xxx.cn/client/wap/common/js/aes.js"></script>
+	
+	<script type="text/javascript">
+  		function MyEncrypt(){
+  			var str = document.getElementById("words").value;
+  			if(str == ""){
+  				alert("必须输入字典");
+  				return;
+  			}
+  			var str1=str.split("\n");
+  			var text = "";
+  			for (var i = 0; i < str1.length; i++) {
+  				//加密方法(修改这里)
+				text += encrypt(str1[i])+"\n";
+			}
+  			document.getElementById("encwords").innerHTML = text; 		  	
+  		}
+  	</script>
+  </head>
+  <body>
+  	<table align="center">
+  		<tr>
+  			<th>字典</th>
+  			<th>加密</th>
+  			<th>密文</th>
+  		</tr>
+  		<tr>
+  			<td><textarea rows="10" cols="30" id="words" required="required" placeholder="输入字典"></textarea></td>
+  			<td><input type="submit" name="encrypt" value="encrypt" onclick="MyEncrypt()"></td>
+  			<td><textarea rows="10" cols="30" id="encwords"></textarea></td>
+  		</tr>
+  		<tr>
+  			<td colspan="3">
+  				<font color="red">!!!使用前提:应用系统登录模块可以暴力破解</font><br>
+  				1.需要引入客户端加密相关使用的js路径，如果多条，引入多条<br>
+  				2.需要修改使用的加密方法名
+  			</td>		
+  		</tr>
+  	</table>
+  </body>
+</html>
